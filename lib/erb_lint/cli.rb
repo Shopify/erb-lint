@@ -33,6 +33,7 @@ module ERBLint
 
     def run(args = ARGV)
       load_options(args)
+      @formatter ||= Formatters::DefaultFormatter.new
       @files = args.dup
 
       load_config
@@ -64,20 +65,7 @@ module ERBLint
         end
       end
 
-      if @stats.corrected > 0
-        corrected_found_diff = @stats.found - @stats.corrected
-        if corrected_found_diff > 0
-          warn Rainbow(
-            "#{@stats.corrected} error(s) corrected and #{corrected_found_diff} error(s) remaining in ERB files"
-          ).red
-        else
-          puts Rainbow("#{@stats.corrected} error(s) corrected in ERB files").green
-        end
-      elsif @stats.found > 0
-        warn Rainbow("#{@stats.found} error(s) were found in ERB files").red
-      else
-        puts Rainbow("No errors were found in ERB files").green
-      end
+      report
 
       @stats.found == 0
     rescue OptionParser::InvalidOption, OptionParser::InvalidArgument, ExitWithFailure => e
@@ -92,6 +80,16 @@ module ERBLint
     end
 
     private
+
+    def report
+      io =
+        if @options[:out]
+          File.open(@options[:out], 'w')
+        else
+          STDOUT
+        end
+      @formatter.report(@stats, @options, io)
+    end
 
     def autocorrect?
       @options[:autocorrect]
@@ -122,13 +120,7 @@ module ERBLint
       end
 
       @stats.found += runner.offenses.size
-      runner.offenses.each do |offense|
-        puts <<~EOF
-          #{offense.message}#{Rainbow(' (not autocorrected)').red if autocorrect?}
-          In file: #{relative_filename(filename)}:#{offense.line_range.begin}
-
-        EOF
-      end
+      @formatter.file_completed relative_filename(filename), runner
     end
 
     def correct(processed_source, offenses)
@@ -266,6 +258,23 @@ module ERBLint
 
         opts.on("--autocorrect", "Correct offenses that can be corrected automatically (default: false)") do |config|
           @options[:autocorrect] = config
+        end
+
+        opts.on("--format FORMAT", "Select output format. (default: default, available formats: default, json)") do |format|
+          @formatter =
+            case format
+            when 'json'
+              Formatters::JSONFormatter.new
+            when 'default'
+              Formatters::DefaultFormatter.new
+            else
+              failure!("#{format}: not a valid format (available formats: default, json)")
+            end
+          @options[:format] = format
+        end
+
+        opts.on("--out FILE", "Write output to a file instead of STDOUT.") do |file|
+          @options[:out] = file
         end
 
         opts.on_tail("-h", "--help", "Show this message") do

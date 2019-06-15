@@ -2,6 +2,8 @@
 
 require 'erb_lint/corrector'
 require 'erb_lint/file_loader'
+require 'erb_lint/formatters/default_formatter'
+require 'erb_lint/formatters/json_formatter'
 require 'erb_lint/linter_config'
 require 'erb_lint/linter_registry'
 require 'erb_lint/linter'
