@@ -4,9 +4,10 @@
 
 ## Requirements
 
-* Ruby 2.3.0+
- - This is due to use of the safe navigation operator (`&.`)
- - This is also due to the use of the tilde-heredoc `<<~` syntax in some tests.
+- Ruby 2.3.0+
+
+* This is due to use of the safe navigation operator (`&.`)
+* This is also due to the use of the tilde-heredoc `<<~` syntax in some tests.
 
 ## Installation
 
@@ -56,8 +57,8 @@ If you want to change the glob & exclude that is used, you can configure it by a
 ---
 glob: "**/*.{html,text,js}{+*,}.erb"
 exclude:
-  - '**/vendor/**/*'
-  - '**/node_modules/**/*'
+  - "**/vendor/**/*"
+  - "**/node_modules/**/*"
 linters:
   ErbSafety:
     enabled: true
@@ -72,12 +73,15 @@ linters:
 Make sure to add `**/` to exclude patterns; it matches the target files' absolute paths.
 
 ## Enable or disable default linters
+
 `EnableDefaultLinters`: enables or disables default linters. [Default linters](#linters) are enabled by default.
 
 ## Disable rule at offense-level
+
 You can disable a rule by placing a disable comment in the following format:
 
 Comment on offending lines
+
 ```.erb
 <hr /> <%# erblint:disable SelfClosingTag %>
 ```
@@ -93,36 +97,37 @@ You can specify the exclude patterns both of global and lint-local.
 ```yaml
 ---
 exclude:
-  - '**/global-lib/**/*'
+  - "**/global-lib/**/*"
 linters:
   ErbSafety:
     exclude:
-      - '**/local-lib/**/*'
+      - "**/local-lib/**/*"
 ```
 
 ## Linters
 
-| Available Linters                                | Default  | Description |
-| ------------------------------------------------ |:--------:|-------------|
-| [AllowedScriptType](#allowedscripttype)          | Yes      | prevents the addition of `<script>` tags that have `type` attributes that are not in a white-list of allowed values |
-| ClosingErbTagIndent                              | Yes      |             |
-| [CommentSyntax](#commentsyntax)                  | Yes      | detects bad ERB comment syntax |
-| ExtraNewline                                     | Yes      |             |
-| [FinalNewline](#finalnewline)                    | Yes      | warns about missing newline at the end of a ERB template |
-| [NoJavascriptTagHelper](#nojavascripttaghelper)  | Yes      | prevents the usage of Rails' `javascript_tag` |
-| ParserErrors                                     | Yes      |             |
-| PartialInstanceVariable                          | No       | detects instance variables in partials |
-| [RequireInputAutocomplete](#requireinputautocomplete)        | Yes       | warns about missing autocomplete attributes in input tags |
-| [RightTrim](#righttrim)                          | Yes      | enforces trimming at the right of an ERB tag |
-| [SelfClosingTag](#selfclosingtag)                | Yes      | enforces self closing tag styles for void elements |
-| [SpaceAroundErbTag](#spacearounderbtag)          | Yes      | enforces a single space after `<%` and before `%>`|
-| SpaceIndentation                                 | Yes      |             |
-| SpaceInHtmlTag                                   | Yes      |             |
-| TrailingWhitespace                               | Yes      |             |
-| [DeprecatedClasses](#deprecatedclasses)          | No       | warns about deprecated css classes |
-| [ErbSafety](#erbsafety)                          | No       | detects unsafe interpolation of ruby data into various javascript contexts and enforce usage of safe helpers like `.to_json`. |
-| [Rubocop](#rubocop)                              | No       | runs RuboCop rules on ruby statements found in ERB templates |
-| [RequireScriptNonce](#requirescriptnonce)        | No       | warns about missing [Content Security Policy nonces](https://guides.rubyonrails.org/security.html#content-security-policy) in script tags |
+| Available Linters                                     | Default | Description                                                                                                                               |
+| ----------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [AllowedScriptType](#allowedscripttype)               |   Yes   | prevents the addition of `<script>` tags that have `type` attributes that are not in a white-list of allowed values                       |
+| ClosingErbTagIndent                                   |   Yes   |                                                                                                                                           |
+| [CommentSyntax](#commentsyntax)                       |   Yes   | detects bad ERB comment syntax                                                                                                            |
+| ExtraNewline                                          |   Yes   |                                                                                                                                           |
+| [FinalNewline](#finalnewline)                         |   Yes   | warns about missing newline at the end of a ERB template                                                                                  |
+| [NoJavascriptTagHelper](#nojavascripttaghelper)       |   Yes   | prevents the usage of Rails' `javascript_tag`                                                                                             |
+| ParserErrors                                          |   Yes   |                                                                                                                                           |
+| [InstanceVariable](#instancevariable)                 |   No    | detects instance variables                                                                                                                |
+| PartialInstanceVariable                               |   No    | detects instance variables in partials (deprecated in favor of [InstanceVariable](#instancevariable))                                     |
+| [RequireInputAutocomplete](#requireinputautocomplete) |   Yes   | warns about missing autocomplete attributes in input tags                                                                                 |
+| [RightTrim](#righttrim)                               |   Yes   | enforces trimming at the right of an ERB tag                                                                                              |
+| [SelfClosingTag](#selfclosingtag)                     |   Yes   | enforces self closing tag styles for void elements                                                                                        |
+| [SpaceAroundErbTag](#spacearounderbtag)               |   Yes   | enforces a single space after `<%` and before `%>`                                                                                        |
+| SpaceIndentation                                      |   Yes   |                                                                                                                                           |
+| SpaceInHtmlTag                                        |   Yes   |                                                                                                                                           |
+| TrailingWhitespace                                    |   Yes   |                                                                                                                                           |
+| [DeprecatedClasses](#deprecatedclasses)               |   No    | warns about deprecated css classes                                                                                                        |
+| [ErbSafety](#erbsafety)                               |   No    | detects unsafe interpolation of ruby data into various javascript contexts and enforce usage of safe helpers like `.to_json`.             |
+| [Rubocop](#rubocop)                                   |   No    | runs RuboCop rules on ruby statements found in ERB templates                                                                              |
+| [RequireScriptNonce](#requirescriptnonce)             |   No    | warns about missing [Content Security Policy nonces](https://guides.rubyonrails.org/security.html#content-security-policy) in script tags |
 
 ### DeprecatedClasses
 
@@ -138,7 +143,7 @@ linters:
   DeprecatedClasses:
     enabled: true
     exclude:
-      - 'app/views/shared/deprecated/**'
+      - "app/views/shared/deprecated/**"
     addendum: "See UX wiki for help."
     rule_set:
       - deprecated: ['badge[-_\w]*']
@@ -149,12 +154,12 @@ You can specify an `addendum` to be added to the end of each violation.
 The error message format is: `"Deprecated class ... #{suggestion}"`
 or `"Deprecated class ... #{suggestion} #{addendum}"` if an `addendum` is present.
 
-Linter-Specific Option | Description
------------------------|-----------------------------------------------------------------------------------
-`rule_set`             | A list of rules, each with a `deprecated` and `suggestion` option.
-`deprecated`           | A list of **regular expressions** which specify the classes deprecated by this rule.
-`suggestion`           | A string to be included in the rule's error message. Make this informative and specific to the rule that it is contained in.
-`addendum`             | A string to be included at the end of every error message of the rule set. (Optional)
+| Linter-Specific Option | Description                                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `rule_set`             | A list of rules, each with a `deprecated` and `suggestion` option.                                                           |
+| `deprecated`           | A list of **regular expressions** which specify the classes deprecated by this rule.                                         |
+| `suggestion`           | A string to be included in the rule's error message. Make this informative and specific to the rule that it is contained in. |
+| `addendum`             | A string to be included at the end of every error message of the rule set. (Optional)                                        |
 
 ### FinalNewline
 
@@ -174,9 +179,9 @@ linters:
     enabled: true
 ```
 
-Linter-Specific Option | Description
------------------------|---------------------------------------------------------
-`present`              | Whether a final newline should be present (default **true**)
+| Linter-Specific Option | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| `present`              | Whether a final newline should be present (default **true**) |
 
 ### ErbSafety
 
@@ -189,6 +194,7 @@ See [better-html's readme](https://github.com/Shopify/better-html#testing-for-va
 Any ERB statement that does not call a safe helper is deemed unsafe and a violation is shown.
 
 For example:
+
 ```erb
 Not allowed ❌
 <a onclick="alert(<%= some_data %>)">
@@ -215,9 +221,9 @@ linters:
     better_html_config: .better-html.yml
 ```
 
-Linter-Specific Option | Description
------------------------|---------------------------------------------------------
-`better_html_config`   | Name of the configuration file to use for `better-html`. Optional. Valid options and their defaults are described [in better-html's readme](https://github.com/Shopify/better-html#configuration).
+| Linter-Specific Option | Description                                                                                                                                                                                        |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `better_html_config`   | Name of the configuration file to use for `better-html`. Optional. Valid options and their defaults are described [in better-html's readme](https://github.com/Shopify/better-html#configuration). |
 
 ### Rubocop
 
@@ -257,13 +263,14 @@ linters:
 
 The cops disabled in the example configuration above provide a good starting point.
 
-Linter-Specific Option | Description
------------------------|---------------------------------------------------------
-`rubocop_config`       | A valid rubocop configuration hash. Mandatory when this cop is enabled. See [rubocop's manual entry on Configuration](http://rubocop.readthedocs.io/en/latest/configuration/)
-`only`                 | Only run cops listed in this array instead of all cops.
-`config_file_path`     | A path to a valid rubocop configuration file. When this is provided, `rubocop_config` will be ignored.
+| Linter-Specific Option | Description                                                                                                                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rubocop_config`       | A valid rubocop configuration hash. Mandatory when this cop is enabled. See [rubocop's manual entry on Configuration](http://rubocop.readthedocs.io/en/latest/configuration/) |
+| `only`                 | Only run cops listed in this array instead of all cops.                                                                                                                       |
+| `config_file_path`     | A path to a valid rubocop configuration file. When this is provided, `rubocop_config` will be ignored.                                                                        |
 
 ### RequireInputAutocomplete
+
 This linter prevents the usage of certain types of HTML `<input>` without an `autocomplete` argument: `color`, `date`, `datetime-local`, `email`, `month`, `number`, `password`, `range`, `search`, `tel`, `text`, `time`, `url`, or `week`.
 The HTML autocomplete helps users to complete filling in forms by using data stored in the browser. This is particularly useful for people with **motor disabilities** or **cognitive impairment** who may have difficulties filling out forms online.
 
@@ -286,19 +293,18 @@ Example configuration:
 linters:
   RightTrim:
     enabled: true
-    enforced_style: '-'
+    enforced_style: "-"
 ```
 
-Linter-Specific Option | Description
------------------------|---------------------------------------------------------
-`enforced_style`       | Which style to enforce, can be either `-` or `=`. Optional. Defaults to `-`.
+| Linter-Specific Option | Description                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `enforced_style`       | Which style to enforce, can be either `-` or `=`. Optional. Defaults to `-`. |
 
 ### SpaceAroundErbTag
 
 Enforce a single space after `<%` and before `%>` in the ERB source.
 This linter ignores opening ERB tags (`<%`) that are followed by a newline,
 and closing ERB tags (`%>`) that are preceded by a newline.
-
 
 ```erb
 Bad ❌
@@ -361,14 +367,15 @@ Example configuration:
 linters:
   NoJavascriptTagHelper:
     enabled: true
-    correction_style: 'plain'
+    correction_style: "plain"
 ```
 
-Linter-Specific Option | Description
------------------------|---------------------------------------------------------
-`correction_style`     | When configured with `cdata`, adds CDATA markers. When configured with `plain`, don't add makers. Defaults to `cdata`.
+| Linter-Specific Option | Description                                                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `correction_style`     | When configured with `cdata`, adds CDATA markers. When configured with `plain`, don't add makers. Defaults to `cdata`. |
 
 ### RequireScriptNonce
+
 This linter prevents the usage of HTML `<script>`, Rails `javascript_tag`, `javascript_include_tag` and `javascript_pack_tag` without a `nonce` argument. The purpose of such a check is to ensure that when [content securty policy](https://edgeguides.rubyonrails.org/security.html#content-security-policy) is implemented in an application, there is a means of discovering tags that need to be updated with a `nonce` argument to enable script execution at application runtime.
 
 ```
@@ -423,6 +430,7 @@ Good ✅
 ```
 
 If `enforced_style` is set to `never` (HTML5 style):
+
 ```erb
 Bad ❌
 <hr />
@@ -437,12 +445,12 @@ Example configuration:
 linters:
   SelfClosingTag:
     enabled: true
-    enforced_style: 'always'
+    enforced_style: "always"
 ```
 
-Linter-Specific Option | Description
------------------------|---------------------------------------------------------
-`enforced_style`       |  If we should `always` or `never` expect self closing tags for void elements. Defaults to `never`.
+| Linter-Specific Option | Description                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| `enforced_style`       | If we should `always` or `never` expect self closing tags for void elements. Defaults to `never`. |
 
 ### AllowedScriptType
 
@@ -487,18 +495,87 @@ linters:
   AllowedScriptType:
     enabled: true
     allowed_types:
-      - 'application/json'
-      - 'text/javascript'
-      - 'text/html'
+      - "application/json"
+      - "text/javascript"
+      - "text/html"
     allow_blank: false
     disallow_inline_scripts: false
 ```
 
-Linter-Specific Option    | Description
---------------------------|---------------------------------------------------------
-`allowed_types`           | An array of allowed types. Defaults to `["text/javascript"]`.
-`allow_blank`             | True or false, depending on whether or not the `type` attribute may be omitted entirely from a `<script>` tag. Defaults to `true`.
-`disallow_inline_scripts` | Do not allow inline `<script>` tags anywhere in ERB templates. Defaults to `false`.
+| Linter-Specific Option    | Description                                                                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `allowed_types`           | An array of allowed types. Defaults to `["text/javascript"]`.                                                                      |
+| `allow_blank`             | True or false, depending on whether or not the `type` attribute may be omitted entirely from a `<script>` tag. Defaults to `true`. |
+| `disallow_inline_scripts` | Do not allow inline `<script>` tags anywhere in ERB templates. Defaults to `false`.                                                |
+
+### InstanceVariable
+
+This linter prevents instance variables from being referenced in templates.
+
+```erb
+Bad ❌
+<%= @instance_variable %>
+
+Good ✅
+<%= local_variable %>
+```
+
+Instance variables in templates, if not declared (for example because of
+changes or even misspellings), will evaluate to `nil`. Using locals offers better
+protection against inadvertently referencing an undefined instance variable.
+
+Locals also offer more explicit specification of the dependencies of a template,
+which you may prefer for your project.
+
+While locals may be used in any template (see below), they have often been
+limited to use in partials. To restrict this linter to checking partials,
+specify the option `partials_only` to `true`. This configuration can replace the
+usage of the deprecated `PartialInstanceVariable` linter.
+
+To use locals in non-partials in Rails controller actions, you can use an
+explicit `render` method call, e.g.
+
+```ruby
+class MyController < ApplicationController
+  def my_action
+    render locals: { local1: 5, local2: "local 2" }
+  end
+end
+```
+
+To use locals in non-partials in Rails mailers, you can use an explicit `render`
+method call in a `format` block, e.g.
+
+```ruby
+class MyMailer < ApplicationMailer
+  def send_my_mail
+    mail(to: "example@example.com", subject: "Partials in mailer") do |format|
+      format.html do
+        render locals: { local1: 5, local2: "local 2" }
+      end
+    end
+  end
+end
+```
+
+Locals need not be required in templates either. Either of the following techniques
+will allow use of optional locals, including setting defaults within the template:
+
+```erb
+<%
+  optional_variable ||= nil
+  optional_variable_with_default ||= "some default"
+%>
+
+<% if defined?(other_optional_variable) %>
+  <span><%= other_optional_variable %></span>
+<% end %>
+%>
+```
+
+| Linter-Specific Option | Description                                         |
+| ---------------------- | --------------------------------------------------- |
+| `partials_only`        | Boolean to limit linting to partial templates only. |
 
 ## CommentSyntax
 
@@ -650,32 +727,32 @@ Quality](https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-cus
 
 ```json
 [
-   {
-      "description":"Extra space detected where there should be no space.",
-      "check_name":"SpaceInHtmlTag",
-      "fingerprint":"5a259c7cafa2c9ca229dfd7d21536698",
-      "severity":"info",
-      "location":{
-         "path":"app/views/subscriptions/_loader.html.erb",
-         "lines":{
-            "begin":1,
-            "end":1
-         }
+  {
+    "description": "Extra space detected where there should be no space.",
+    "check_name": "SpaceInHtmlTag",
+    "fingerprint": "5a259c7cafa2c9ca229dfd7d21536698",
+    "severity": "info",
+    "location": {
+      "path": "app/views/subscriptions/_loader.html.erb",
+      "lines": {
+        "begin": 1,
+        "end": 1
       }
-   },
-   {
-      "description":"Remove newline before `%\u003e` to match start of tag.",
-      "check_name":"ClosingErbTagIndent",
-      "fingerprint":"60b4ed2120c7abeebebb43fba4a19559",
-      "severity":"warning",
-      "location":{
-         "path":"app/views/subscriptions/_loader.html.erb",
-         "lines":{
-            "begin":52,
-            "end":54
-         }
+    }
+  },
+  {
+    "description": "Remove newline before `%\u003e` to match start of tag.",
+    "check_name": "ClosingErbTagIndent",
+    "fingerprint": "60b4ed2120c7abeebebb43fba4a19559",
+    "severity": "warning",
+    "location": {
+      "path": "app/views/subscriptions/_loader.html.erb",
+      "lines": {
+        "begin": 52,
+        "end": 54
       }
-   }
+    }
+  }
 ]
 ```
 
