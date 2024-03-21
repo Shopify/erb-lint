@@ -214,7 +214,7 @@ module ERBLint
         @connections.each do |first|
           @connections.each do |second|
             next if first == second
-            return [first, second] if first.intersect?(second)
+            return [first, second] if (first & second).any?
           end
         end
         nil
