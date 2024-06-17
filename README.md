@@ -102,27 +102,28 @@ linters:
 
 ## Linters
 
-| Available Linters                                | Default  | Description |
-| ------------------------------------------------ |:--------:|-------------|
-| [AllowedScriptType](#allowedscripttype)          | Yes      | prevents the addition of `<script>` tags that have `type` attributes that are not in a white-list of allowed values |
-| ClosingErbTagIndent                              | Yes      |             |
-| [CommentSyntax](#commentsyntax)                  | Yes      | detects bad ERB comment syntax |
-| ExtraNewline                                     | Yes      |             |
-| [FinalNewline](#finalnewline)                    | Yes      | warns about missing newline at the end of a ERB template |
-| [NoJavascriptTagHelper](#nojavascripttaghelper)  | Yes      | prevents the usage of Rails' `javascript_tag` |
-| ParserErrors                                     | Yes      |             |
-| PartialInstanceVariable                          | No       | detects instance variables in partials |
-| [RequireInputAutocomplete](#requireinputautocomplete)        | Yes       | warns about missing autocomplete attributes in input tags |
-| [RightTrim](#righttrim)                          | Yes      | enforces trimming at the right of an ERB tag |
-| [SelfClosingTag](#selfclosingtag)                | Yes      | enforces self closing tag styles for void elements |
-| [SpaceAroundErbTag](#spacearounderbtag)          | Yes      | enforces a single space after `<%` and before `%>`|
-| SpaceIndentation                                 | Yes      |             |
-| SpaceInHtmlTag                                   | Yes      |             |
-| TrailingWhitespace                               | Yes      |             |
-| [DeprecatedClasses](#deprecatedclasses)          | No       | warns about deprecated css classes |
-| [ErbSafety](#erbsafety)                          | No       | detects unsafe interpolation of ruby data into various javascript contexts and enforce usage of safe helpers like `.to_json`. |
-| [Rubocop](#rubocop)                              | No       | runs RuboCop rules on ruby statements found in ERB templates |
-| [RequireScriptNonce](#requirescriptnonce)        | No       | warns about missing [Content Security Policy nonces](https://guides.rubyonrails.org/security.html#content-security-policy) in script tags |
+| Available Linters                                     | Default | Description                                                                                                                               |
+| ----------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [AllowedScriptType](#allowedscripttype)               |   Yes   | prevents the addition of `<script>` tags that have `type` attributes that are not in a white-list of allowed values                       |
+| ClosingErbTagIndent                                   |   Yes   |                                                                                                                                           |
+| [CommentSyntax](#commentsyntax)                       |   Yes   | detects bad ERB comment syntax                                                                                                            |
+| ExtraNewline                                          |   Yes   |                                                                                                                                           |
+| [FinalNewline](#finalnewline)                         |   Yes   | warns about missing newline at the end of a ERB template                                                                                  |
+| [NoJavascriptTagHelper](#nojavascripttaghelper)       |   Yes   | prevents the usage of Rails' `javascript_tag`                                                                                             |
+| ParserErrors                                          |   Yes   |                                                                                                                                           |
+| [InstanceVariable](#instancevariable)                 |   No    | detects instance variables                                                                                                                |
+| PartialInstanceVariable                               |   No    | detects instance variables in partials (deprecated in favor of [InstanceVariable](#instancevariable))                                     |
+| [RequireInputAutocomplete](#requireinputautocomplete) |   Yes   | warns about missing autocomplete attributes in input tags                                                                                 |
+| [RightTrim](#righttrim)                               |   Yes   | enforces trimming at the right of an ERB tag                                                                                              |
+| [SelfClosingTag](#selfclosingtag)                     |   Yes   | enforces self closing tag styles for void elements                                                                                        |
+| [SpaceAroundErbTag](#spacearounderbtag)               |   Yes   | enforces a single space after `<%` and before `%>`                                                                                        |
+| SpaceIndentation                                      |   Yes   |                                                                                                                                           |
+| SpaceInHtmlTag                                        |   Yes   |                                                                                                                                           |
+| TrailingWhitespace                                    |   Yes   |                                                                                                                                           |
+| [DeprecatedClasses](#deprecatedclasses)               |   No    | warns about deprecated css classes                                                                                                        |
+| [ErbSafety](#erbsafety)                               |   No    | detects unsafe interpolation of ruby data into various javascript contexts and enforce usage of safe helpers like `.to_json`.             |
+| [Rubocop](#rubocop)                                   |   No    | runs RuboCop rules on ruby statements found in ERB templates                                                                              |
+| [RequireScriptNonce](#requirescriptnonce)             |   No    | warns about missing [Content Security Policy nonces](https://guides.rubyonrails.org/security.html#content-security-policy) in script tags |
 
 ### DeprecatedClasses
 
@@ -499,6 +500,75 @@ Linter-Specific Option    | Description
 `allowed_types`           | An array of allowed types. Defaults to `["text/javascript"]`.
 `allow_blank`             | True or false, depending on whether or not the `type` attribute may be omitted entirely from a `<script>` tag. Defaults to `true`.
 `disallow_inline_scripts` | Do not allow inline `<script>` tags anywhere in ERB templates. Defaults to `false`.
+
+### InstanceVariable
+
+This linter prevents instance variables from being referenced in templates.
+
+```erb
+Bad ❌
+<%= @instance_variable %>
+
+Good ✅
+<%= local_variable %>
+```
+
+Instance variables in templates, if not declared (for example because of
+changes or even misspellings), will evaluate to `nil`. Using locals offers better
+protection against inadvertently referencing an undefined instance variable.
+
+Locals also offer more explicit specification of the dependencies of a template,
+which you may prefer for your project.
+
+While locals may be used in any template (see below), they have often been
+limited to use in partials. To restrict this linter to checking partials,
+specify the option `partials_only` to `true`. This configuration can replace the
+usage of the deprecated `PartialInstanceVariable` linter.
+
+To use locals in non-partials in Rails controller actions, you can use an
+explicit `render` method call, e.g.
+
+```ruby
+class MyController < ApplicationController
+  def my_action
+    render locals: { local1: 5, local2: "local 2" }
+  end
+end
+```
+
+To use locals in non-partials in Rails mailers, you can use an explicit `render`
+method call in a `format` block, e.g.
+
+```ruby
+class MyMailer < ApplicationMailer
+  def send_my_mail
+    mail(to: "example@example.com", subject: "Partials in mailer") do |format|
+      format.html do
+        render locals: { local1: 5, local2: "local 2" }
+      end
+    end
+  end
+end
+```
+
+Locals need not be required in templates either. Either of the following techniques
+will allow use of optional locals, including setting defaults within the template:
+
+```erb
+<%
+  optional_variable ||= nil
+  optional_variable_with_default ||= "some default"
+%>
+
+<% if defined?(other_optional_variable) %>
+  <span><%= other_optional_variable %></span>
+<% end %>
+%>
+```
+
+| Linter-Specific Option | Description                                         |
+| ---------------------- | --------------------------------------------------- |
+| `partials_only`        | Boolean to limit linting to partial templates only. |
 
 ## CommentSyntax
 
