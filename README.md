@@ -4,10 +4,9 @@
 
 ## Requirements
 
-- Ruby 2.3.0+
-
-* This is due to use of the safe navigation operator (`&.`)
-* This is also due to the use of the tilde-heredoc `<<~` syntax in some tests.
+* Ruby 2.3.0+
+ - This is due to use of the safe navigation operator (`&.`)
+ - This is also due to the use of the tilde-heredoc `<<~` syntax in some tests.
 
 ## Installation
 
@@ -57,8 +56,8 @@ If you want to change the glob & exclude that is used, you can configure it by a
 ---
 glob: "**/*.{html,text,js}{+*,}.erb"
 exclude:
-  - "**/vendor/**/*"
-  - "**/node_modules/**/*"
+  - '**/vendor/**/*'
+  - '**/node_modules/**/*'
 linters:
   ErbSafety:
     enabled: true
@@ -73,15 +72,12 @@ linters:
 Make sure to add `**/` to exclude patterns; it matches the target files' absolute paths.
 
 ## Enable or disable default linters
-
 `EnableDefaultLinters`: enables or disables default linters. [Default linters](#linters) are enabled by default.
 
 ## Disable rule at offense-level
-
 You can disable a rule by placing a disable comment in the following format:
 
 Comment on offending lines
-
 ```.erb
 <hr /> <%# erblint:disable SelfClosingTag %>
 ```
@@ -97,11 +93,11 @@ You can specify the exclude patterns both of global and lint-local.
 ```yaml
 ---
 exclude:
-  - "**/global-lib/**/*"
+  - '**/global-lib/**/*'
 linters:
   ErbSafety:
     exclude:
-      - "**/local-lib/**/*"
+      - '**/local-lib/**/*'
 ```
 
 ## Linters
@@ -143,7 +139,7 @@ linters:
   DeprecatedClasses:
     enabled: true
     exclude:
-      - "app/views/shared/deprecated/**"
+      - 'app/views/shared/deprecated/**'
     addendum: "See UX wiki for help."
     rule_set:
       - deprecated: ['badge[-_\w]*']
@@ -154,12 +150,12 @@ You can specify an `addendum` to be added to the end of each violation.
 The error message format is: `"Deprecated class ... #{suggestion}"`
 or `"Deprecated class ... #{suggestion} #{addendum}"` if an `addendum` is present.
 
-| Linter-Specific Option | Description                                                                                                                  |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `rule_set`             | A list of rules, each with a `deprecated` and `suggestion` option.                                                           |
-| `deprecated`           | A list of **regular expressions** which specify the classes deprecated by this rule.                                         |
-| `suggestion`           | A string to be included in the rule's error message. Make this informative and specific to the rule that it is contained in. |
-| `addendum`             | A string to be included at the end of every error message of the rule set. (Optional)                                        |
+Linter-Specific Option | Description
+-----------------------|-----------------------------------------------------------------------------------
+`rule_set`             | A list of rules, each with a `deprecated` and `suggestion` option.
+`deprecated`           | A list of **regular expressions** which specify the classes deprecated by this rule.
+`suggestion`           | A string to be included in the rule's error message. Make this informative and specific to the rule that it is contained in.
+`addendum`             | A string to be included at the end of every error message of the rule set. (Optional)
 
 ### FinalNewline
 
@@ -179,9 +175,9 @@ linters:
     enabled: true
 ```
 
-| Linter-Specific Option | Description                                                  |
-| ---------------------- | ------------------------------------------------------------ |
-| `present`              | Whether a final newline should be present (default **true**) |
+Linter-Specific Option | Description
+-----------------------|---------------------------------------------------------
+`present`              | Whether a final newline should be present (default **true**)
 
 ### ErbSafety
 
@@ -194,7 +190,6 @@ See [better-html's readme](https://github.com/Shopify/better-html#testing-for-va
 Any ERB statement that does not call a safe helper is deemed unsafe and a violation is shown.
 
 For example:
-
 ```erb
 Not allowed ❌
 <a onclick="alert(<%= some_data %>)">
@@ -221,9 +216,9 @@ linters:
     better_html_config: .better-html.yml
 ```
 
-| Linter-Specific Option | Description                                                                                                                                                                                        |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `better_html_config`   | Name of the configuration file to use for `better-html`. Optional. Valid options and their defaults are described [in better-html's readme](https://github.com/Shopify/better-html#configuration). |
+Linter-Specific Option | Description
+-----------------------|---------------------------------------------------------
+`better_html_config`   | Name of the configuration file to use for `better-html`. Optional. Valid options and their defaults are described [in better-html's readme](https://github.com/Shopify/better-html#configuration).
 
 ### Rubocop
 
@@ -263,14 +258,13 @@ linters:
 
 The cops disabled in the example configuration above provide a good starting point.
 
-| Linter-Specific Option | Description                                                                                                                                                                   |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rubocop_config`       | A valid rubocop configuration hash. Mandatory when this cop is enabled. See [rubocop's manual entry on Configuration](http://rubocop.readthedocs.io/en/latest/configuration/) |
-| `only`                 | Only run cops listed in this array instead of all cops.                                                                                                                       |
-| `config_file_path`     | A path to a valid rubocop configuration file. When this is provided, `rubocop_config` will be ignored.                                                                        |
+Linter-Specific Option | Description
+-----------------------|---------------------------------------------------------
+`rubocop_config`       | A valid rubocop configuration hash. Mandatory when this cop is enabled. See [rubocop's manual entry on Configuration](http://rubocop.readthedocs.io/en/latest/configuration/)
+`only`                 | Only run cops listed in this array instead of all cops.
+`config_file_path`     | A path to a valid rubocop configuration file. When this is provided, `rubocop_config` will be ignored.
 
 ### RequireInputAutocomplete
-
 This linter prevents the usage of certain types of HTML `<input>` without an `autocomplete` argument: `color`, `date`, `datetime-local`, `email`, `month`, `number`, `password`, `range`, `search`, `tel`, `text`, `time`, `url`, or `week`.
 The HTML autocomplete helps users to complete filling in forms by using data stored in the browser. This is particularly useful for people with **motor disabilities** or **cognitive impairment** who may have difficulties filling out forms online.
 
@@ -293,18 +287,19 @@ Example configuration:
 linters:
   RightTrim:
     enabled: true
-    enforced_style: "-"
+    enforced_style: '-'
 ```
 
-| Linter-Specific Option | Description                                                                  |
-| ---------------------- | ---------------------------------------------------------------------------- |
-| `enforced_style`       | Which style to enforce, can be either `-` or `=`. Optional. Defaults to `-`. |
+Linter-Specific Option | Description
+-----------------------|---------------------------------------------------------
+`enforced_style`       | Which style to enforce, can be either `-` or `=`. Optional. Defaults to `-`.
 
 ### SpaceAroundErbTag
 
 Enforce a single space after `<%` and before `%>` in the ERB source.
 This linter ignores opening ERB tags (`<%`) that are followed by a newline,
 and closing ERB tags (`%>`) that are preceded by a newline.
+
 
 ```erb
 Bad ❌
@@ -367,15 +362,14 @@ Example configuration:
 linters:
   NoJavascriptTagHelper:
     enabled: true
-    correction_style: "plain"
+    correction_style: 'plain'
 ```
 
-| Linter-Specific Option | Description                                                                                                            |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `correction_style`     | When configured with `cdata`, adds CDATA markers. When configured with `plain`, don't add makers. Defaults to `cdata`. |
+Linter-Specific Option | Description
+-----------------------|---------------------------------------------------------
+`correction_style`     | When configured with `cdata`, adds CDATA markers. When configured with `plain`, don't add makers. Defaults to `cdata`.
 
 ### RequireScriptNonce
-
 This linter prevents the usage of HTML `<script>`, Rails `javascript_tag`, `javascript_include_tag` and `javascript_pack_tag` without a `nonce` argument. The purpose of such a check is to ensure that when [content securty policy](https://edgeguides.rubyonrails.org/security.html#content-security-policy) is implemented in an application, there is a means of discovering tags that need to be updated with a `nonce` argument to enable script execution at application runtime.
 
 ```
@@ -430,7 +424,6 @@ Good ✅
 ```
 
 If `enforced_style` is set to `never` (HTML5 style):
-
 ```erb
 Bad ❌
 <hr />
@@ -445,12 +438,12 @@ Example configuration:
 linters:
   SelfClosingTag:
     enabled: true
-    enforced_style: "always"
+    enforced_style: 'always'
 ```
 
-| Linter-Specific Option | Description                                                                                       |
-| ---------------------- | ------------------------------------------------------------------------------------------------- |
-| `enforced_style`       | If we should `always` or `never` expect self closing tags for void elements. Defaults to `never`. |
+Linter-Specific Option | Description
+-----------------------|---------------------------------------------------------
+`enforced_style`       |  If we should `always` or `never` expect self closing tags for void elements. Defaults to `never`.
 
 ### AllowedScriptType
 
@@ -495,18 +488,18 @@ linters:
   AllowedScriptType:
     enabled: true
     allowed_types:
-      - "application/json"
-      - "text/javascript"
-      - "text/html"
+      - 'application/json'
+      - 'text/javascript'
+      - 'text/html'
     allow_blank: false
     disallow_inline_scripts: false
 ```
 
-| Linter-Specific Option    | Description                                                                                                                        |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `allowed_types`           | An array of allowed types. Defaults to `["text/javascript"]`.                                                                      |
-| `allow_blank`             | True or false, depending on whether or not the `type` attribute may be omitted entirely from a `<script>` tag. Defaults to `true`. |
-| `disallow_inline_scripts` | Do not allow inline `<script>` tags anywhere in ERB templates. Defaults to `false`.                                                |
+Linter-Specific Option    | Description
+--------------------------|---------------------------------------------------------
+`allowed_types`           | An array of allowed types. Defaults to `["text/javascript"]`.
+`allow_blank`             | True or false, depending on whether or not the `type` attribute may be omitted entirely from a `<script>` tag. Defaults to `true`.
+`disallow_inline_scripts` | Do not allow inline `<script>` tags anywhere in ERB templates. Defaults to `false`.
 
 ### InstanceVariable
 
@@ -727,32 +720,32 @@ Quality](https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-cus
 
 ```json
 [
-  {
-    "description": "Extra space detected where there should be no space.",
-    "check_name": "SpaceInHtmlTag",
-    "fingerprint": "5a259c7cafa2c9ca229dfd7d21536698",
-    "severity": "info",
-    "location": {
-      "path": "app/views/subscriptions/_loader.html.erb",
-      "lines": {
-        "begin": 1,
-        "end": 1
+   {
+      "description":"Extra space detected where there should be no space.",
+      "check_name":"SpaceInHtmlTag",
+      "fingerprint":"5a259c7cafa2c9ca229dfd7d21536698",
+      "severity":"info",
+      "location":{
+         "path":"app/views/subscriptions/_loader.html.erb",
+         "lines":{
+            "begin":1,
+            "end":1
+         }
       }
-    }
-  },
-  {
-    "description": "Remove newline before `%\u003e` to match start of tag.",
-    "check_name": "ClosingErbTagIndent",
-    "fingerprint": "60b4ed2120c7abeebebb43fba4a19559",
-    "severity": "warning",
-    "location": {
-      "path": "app/views/subscriptions/_loader.html.erb",
-      "lines": {
-        "begin": 52,
-        "end": 54
+   },
+   {
+      "description":"Remove newline before `%\u003e` to match start of tag.",
+      "check_name":"ClosingErbTagIndent",
+      "fingerprint":"60b4ed2120c7abeebebb43fba4a19559",
+      "severity":"warning",
+      "location":{
+         "path":"app/views/subscriptions/_loader.html.erb",
+         "lines":{
+            "begin":52,
+            "end":54
+         }
       }
-    }
-  }
+   }
 ]
 ```
 
